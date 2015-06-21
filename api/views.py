@@ -1,7 +1,8 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from api.models import Log
-import datetime
+from api.classes.github_manager import GithubManager
+# import datetime
 
 
 def regist_log(type, value, timestamp):
@@ -14,7 +15,7 @@ def regist_log(type, value, timestamp):
     """
     try:
         # ユニークなレコードであることの保証
-        log = Log.objects.get(type=type, value=value, timestamp=timestamp)
+        log = Log.objects.get(type=type, timestamp=timestamp)
         return False
     except ObjectDoesNotExist:
         log = Log(type=type, value=value, timestamp=timestamp)
@@ -25,9 +26,11 @@ def regist_log(type, value, timestamp):
 def job(request):
     """クロールしてログデータベースの更新, 定期的に行うメインのジョブ"""
     logs = Log.objects.all()
-    regist_log(type=1, value='foo bar', timestamp=datetime.datetime.now())
+    # regist_log(type=1, value='foo bar', timestamp=datetime.datetime.now())
     for log in logs:
         print(log.id, log.timestamp, log.created_at)
+    gm = GithubManager()
+    gm.get()
     return HttpResponse(u'ok job page')
 
 
