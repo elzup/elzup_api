@@ -1,6 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
-from elzup_api.models import Log
+from api.models import Log
+import datetime
 
 
 def regist_log(type, value, timestamp):
@@ -13,17 +14,20 @@ def regist_log(type, value, timestamp):
     """
     try:
         # ユニークなレコードであることの保証
-        pos = Log.objects.get(type=type, value=value, timestamp=timestamp)
+        log = Log.objects.get(type=type, value=value, timestamp=timestamp)
         return False
     except ObjectDoesNotExist:
-        pos = Log(type=type, value=value, timestamp=timestamp)
-        pos.save()
+        log = Log(type=type, value=value, timestamp=timestamp)
+        log.save()
     return True
 
 
 def job(request):
     """クロールしてログデータベースの更新, 定期的に行うメインのジョブ"""
-    # TODO:
+    logs = Log.objects.all()
+    regist_log(type=1, value='foo bar', timestamp=datetime.datetime.now())
+    for log in logs:
+        print(log.id, log.timestamp, log.created_at)
     return HttpResponse(u'ok job page')
 
 
@@ -34,3 +38,4 @@ def udpate_github():
     """
     # TDOO: ログ
     pass
+

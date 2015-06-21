@@ -69,7 +69,7 @@ config.ini
 *.ipr
 *.iws
 
-## Plugin-specific files:
+j# Plugin-specific files:
 
 # IntelliJ
 /out/
