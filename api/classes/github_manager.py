@@ -10,4 +10,12 @@ class GithubManager:
     def get(self):
         # TODO: rss manage
         feed = feedparser.parse(self.RSS_URL)
-        print(feed.feed.title)
+        for item in feed['entries']:
+            # NOTE: 完全な判別が出来ていなくて少々危ない
+            if 'pushed' in item.title:
+                print(item)
+                v = item.value
+                # TODO: commit の分解
+                print(type(v))
+                print(v)
+
