@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'api',
     'feedparser',
+    'bs4',
 )
 
 MIDDLEWARE_CLASSES = (
