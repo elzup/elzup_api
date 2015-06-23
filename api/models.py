@@ -6,5 +6,5 @@ class Log(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, unique=True)
     type = models.SmallIntegerField()
     # NOTE: 必要によって増やす
-    value = models.CharField(max_length=200)
+    value = models.CharField(max_length=256)
     timestamp = models.DateTimeField()
