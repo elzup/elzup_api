@@ -2,7 +2,16 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from api.models import Log
 from api.classes.github_manager import GithubManager
+from enum import Enum
 # import datetime
+
+
+class LogType(Enum):
+    twitter = 0
+    github = 1
+
+
+GITHUB_LOG_VALUE_FORMAT = '{url},{message}'
 
 
 def regist_log(type, value, timestamp):
@@ -13,6 +22,7 @@ def regist_log(type, value, timestamp):
     :param timestamp: int
     :return: bool 登録出来たか
     """
+    type = type.value
     try:
         # ユニークなレコードであることの保証
         log = Log.objects.get(type=type, timestamp=timestamp)
@@ -41,6 +51,9 @@ def update_github_log():
     """
     gm = GithubManager()
     commits = gm.get()
-    print(commits)
-    pass
 
+    for cm in commits:
+        url, message, datetime_ = cm
+        # print(url, message, datetime_)
+        value = GITHUB_LOG_VALUE_FORMAT.format(url=url, message=message)
+        regist_log(LogType.github, value, timestamp=datetime_)

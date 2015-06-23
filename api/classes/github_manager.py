@@ -1,7 +1,7 @@
 import feedparser
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class GithubManager:
 
@@ -49,5 +49,7 @@ class GithubManager:
         message = soup.find(class_='commit-title').text.strip()
         # NOTE: datetime の文字列に含まれる T, Z がなんなのかわからない
         datetime_ = datetime.strptime(soup.time['datetime'], '%Y-%m-%dT%H:%M:%SZ')
+        # 日本時刻
+        datetime_ += timedelta(hours=9)
         # NOTE: 構造が抽象的なデータの受け渡しになっている
         return [url, message, datetime_]
